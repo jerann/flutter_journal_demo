@@ -31,7 +31,6 @@ class _ConnectingWidgetState extends State<ConnectingWidget> with TickerProvider
     _rotateAnimation = new Tween(begin: 0.0, end: -(pi * 2)).animate(_controller)
       ..addListener(() {
         setState(() {
-//        print("STATE: ${_rotateAnimation.value}");
         });
       });
 

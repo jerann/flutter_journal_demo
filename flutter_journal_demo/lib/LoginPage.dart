@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase/firebase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'CoolRoundedButton.dart';
 import 'Validators.dart';
 import 'ConnectingWidget.dart';
 import 'HomePage.dart';
+import 'FirebaseWrapper.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -47,79 +45,35 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _attemptLogin() async {
-    var authResult;
-
-    //First, authenticate to Firebase with the provided email & password
-    //Then grab the user info
-
-    try {
-      if (kIsWeb) {
-        //Have to use Firebase a bit differently for the web builds...
-//        authResult = await auth().signInWithEmailAndPassword(_email, _password);
-//        var userDocResult = await firestore()
-//            .collection('users')
-//            .doc(authResult.user.uid)
-//            .get();
-//
-//        print('Logged in as user ${userDocResult.id}');
-//        Navigator.pushReplacement(context, MaterialPageRoute(
-//                      builder: (context) => HomePage(userId: userDocResult.id)));
-      } else {
-        //iOS + Android
-        authResult = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: _email, password: _password);
-        var userDocResult = await Firestore.instance
-            .collection('users')
-            .document(authResult.user.uid)
-            .get();
-
-        print('Logged in as user ${userDocResult.documentID}');
-        Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) => HomePage(userId: userDocResult.documentID)));
-      }
-    } catch (error) {
+    var loginResult = await FirebaseWrapper().signIn(_email, _password);
+    if (loginResult != null) {
+      print('Finished logging in');
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage(userId: loginResult)));
+    } else {
       print('Failed to login');
       setState(() {
         loginState = StatusState.failed;
       });
-      return;
     }
-
   }
 
   void _attemptAccountCreation() async {
-    try {
-      if (kIsWeb) {
-//        UserCredential authResult;
-//        //Have to use Firebase a bit differently for web builds...
-//        authResult =
-//            await auth().createUserWithEmailAndPassword(_email, _password);
-//        await firestore()
-//            .collection('users')
-//            .doc(authResult.user.uid)
-//            .set({'uid': authResult.user.uid, 'email': _email});
-      } else {
-        //iOS + Android
-        AuthResult authResult;
-        authResult = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: _email, password: _password);
-        await Firestore.instance
-            .collection('users')
-            .document(authResult.user.uid)
-            .setData({'uid': authResult.user.uid, 'email': _email});
-      }
-    } catch (error) {
-      print('Failed to create new user: $error');
+    var creationResult =
+        await FirebaseWrapper().createAccount(_email, _password);
+    if (creationResult) {
+      print('Finished creating new user');
+      setState(() {
+        registerState = StatusState.success;
+      });
+    } else {
+      print('Failed to create new user');
       setState(() {
         registerState = StatusState.failed;
       });
-      return;
     }
-
-    print('Finished creating new user');
-    setState(() {
-      registerState = StatusState.success;
-    });
   }
 
   void _removeWhitespaceFromTextFields() {
@@ -262,7 +216,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _pendingWidget() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 30), child: ConnectingWidget());
+        padding: EdgeInsets.symmetric(vertical: 30),
+        child: ConnectingWidget(color: Colors.white));
   }
 
   Widget _loginColumnElement(int index) {
@@ -316,6 +271,12 @@ class _LoginPageState extends State<LoginPage> {
         break;
     }
 
+    OutlineInputBorder _border(Color color) {
+      return OutlineInputBorder(
+          borderRadius: BorderRadius.circular(28),
+          borderSide: BorderSide(color: color, width: 3));
+    }
+
     textField = new TextFormField(
       style: textFieldInputStyle,
       maxLines: 1,
@@ -323,18 +284,10 @@ class _LoginPageState extends State<LoginPage> {
           contentPadding: EdgeInsets.symmetric(horizontal: 12),
           fillColor: Colors.white,
           filled: true,
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
-              borderSide: BorderSide(color: Colors.white, width: 3)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
-              borderSide: BorderSide(color: Colors.lightBlue, width: 3)),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
-              borderSide: BorderSide(color: Colors.red, width: 3)),
-          focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
-              borderSide: BorderSide(color: Colors.red, width: 3))),
+          enabledBorder: _border(Colors.white),
+          focusedBorder: _border(Colors.lightBlue),
+          errorBorder: _border(Colors.red),
+          focusedErrorBorder: _border(Colors.red)),
       controller: controller,
       obscureText: index != 0,
       keyboardType: index == 0
