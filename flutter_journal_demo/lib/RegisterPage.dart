@@ -15,6 +15,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Create a New Account'),
+        centerTitle: true,
+      ),
+      body: Container(alignment: Alignment.center,
+      child: AnimatedContainer(
+        height: 400,
+        width: 340,
+      )),
+    );
   }
 }

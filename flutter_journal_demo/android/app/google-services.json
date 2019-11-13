@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "901468707772",
+    "firebase_url": "https://flutterjournaldemo.firebaseio.com",
+    "project_id": "flutterjournaldemo",
+    "storage_bucket": "flutterjournaldemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901468707772:android:f749eaf1118853aa8a29b9",
+        "android_client_info": {
+          "package_name": "jerann.flutter_journal_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901468707772-jk1g6pslb32ibbdje74rkhnc6mpm521e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4HWRJ5msYspynp2hmZDCfmhTBFmrhI-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901468707772-jk1g6pslb32ibbdje74rkhnc6mpm521e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "901468707772-ghlq4lonifhlt49b7d7opeefvad9krnl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jerann.flutterJournalDemo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
