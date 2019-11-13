@@ -37,8 +37,10 @@ class FirebaseWrapper {
 
   Future<void> _webSignOut() async {
     //v WEB
-
+//    return await auth().signOut();
     //^ WEB
+
+    return;
   }
 
   Future<bool> _webCreateAccount(String email, String password) async {
@@ -50,12 +52,24 @@ class FirebaseWrapper {
 //          .collection('users')
 //          .doc(authResult.user.uid)
 //          .set({'uid': authResult.user.uid, 'email': email});
-//    } catch (error) {
+//    } catch (error)  {
 //      print('Firebase: failed webSignIn: $error');
 //      return false;
 //    }
     //^ WEB
 
+    return false;
+  }
+
+  Future<Map<String, dynamic>> _webGetPosts(String uid) async {
+    return null;
+  }
+
+  Future<bool> _webCreatePost(String uid, Map<String, dynamic> data) async {
+    return null;
+  }
+
+  Future<bool> _webUpdatePost(String uid, String postID, Map<String, dynamic> data) async {
     return false;
   }
 
@@ -97,6 +111,27 @@ class FirebaseWrapper {
     return null;
   }
 
+  Future<Map<String, dynamic>> getPosts(String uid) async {
+    if (kIsWeb) {
+      return _webGetPosts(uid);
+    }
+    return _mobileGetPosts(uid);
+  }
+
+  Future<bool> createPost(String uid, Map<String, dynamic> data) async {
+    if (kIsWeb) {
+      return _webCreatePost(uid, data);
+    }
+    return _mobileCreatePost(uid, data);
+  }
+
+  Future<bool> updatePost(String uid, String postID, Map<String, dynamic> data) async {
+    if (kIsWeb) {
+      return _webUpdatePost(uid, postID, data);
+    }
+    return _mobileUpdatePost(uid, postID, data);
+  }
+
   Future<String> _mobileSignIn(String email, String password) async {
     try {
       var authResult = await FirebaseAuth.instance
@@ -129,5 +164,36 @@ class FirebaseWrapper {
       print('Firebase: failed mobileCreateAccount: $error');
       return false;
     }
+  }
+
+  Future<Map<String, dynamic>> _mobileGetPosts(String uid) async {
+    try {
+      var entriesDocResult = await Firestore.instance.collection('entries').document(uid).get();
+      return entriesDocResult.data;
+    } catch (error) {
+      print('Failed to retrieve entries');
+    }
+    return null;
+  }
+
+  Future<bool> _mobileCreatePost(String uid, Map<String, dynamic> data) async {
+    try {
+      var timestampID = DateTime.now().millisecondsSinceEpoch.toString();
+      await Firestore.instance.collection('entries').document(uid).updateData({timestampID : data});
+      return true;
+    } catch (error) {
+      print('Failed to create post');
+    }
+    return false;
+  }
+
+  Future <bool> _mobileUpdatePost(String uid, String postID, Map<String, dynamic> data) async {
+    try {
+      await Firestore.instance.collection('entries').document(uid).updateData({postID : data});
+      return true;
+    } catch (error) {
+      print('Failed to update post');
+    }
+    return false;
   }
 }

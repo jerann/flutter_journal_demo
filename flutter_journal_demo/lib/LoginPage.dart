@@ -90,39 +90,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    //Calculate height for animated container
-    double animatedHeight = 0;
-    if (loginPageState == LoginPageState.login) {
-      //Login
-      switch (loginState) {
-        case StatusState.idle:
-          animatedHeight = 290;
-          break;
-        case StatusState.failed:
-          animatedHeight = 320;
-          break;
-        default:
-          animatedHeight = 260;
-          break;
-      }
-    } else {
-      //Register
-      switch (registerState) {
-        case StatusState.idle:
-          animatedHeight = 360;
-          break;
-        case StatusState.failed:
-          animatedHeight = 390;
-          break;
-        case StatusState.pending:
-          animatedHeight = 330;
-          break;
-        default:
-          animatedHeight = 200;
-          break;
-      }
-    }
-
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -135,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
         body: Container(
           alignment: Alignment.center,
           child: AnimatedContainer(
-              height: animatedHeight,
+              height: _animatedContainerHeight(),
               width: 380,
               decoration: BoxDecoration(
                 color: Colors.blue,
@@ -422,5 +389,37 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
     );
+  }
+
+  double _animatedContainerHeight() {
+    if (loginPageState == LoginPageState.login) {
+      //Login
+      switch (loginState) {
+        case StatusState.idle:
+          return 290;
+        case StatusState.failed:
+          return 320;
+          break;
+        default:
+          return 260;
+          break;
+      }
+    } else {
+      //Register
+      switch (registerState) {
+        case StatusState.idle:
+          return 360;
+          break;
+        case StatusState.failed:
+          return 390;
+          break;
+        case StatusState.pending:
+          return 330;
+          break;
+        default:
+          return 200;
+          break;
+      }
+    }
   }
 }

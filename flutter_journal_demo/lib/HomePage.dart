@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_journal_demo/CoolRoundedButton.dart';
 import 'package:flutter_journal_demo/FirebaseWrapper.dart';
+import 'package:flutter_journal_demo/LoginPage.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.userId});
@@ -12,9 +13,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  StatusState editingState = StatusState.idle;
+
   @override
   void initState() {
     super.initState();
+    _fetchUserPosts();
+  }
+
+  void _fetchUserPosts() async {
+    //Retrieve all posts for this user from Firebase
   }
 
   @override

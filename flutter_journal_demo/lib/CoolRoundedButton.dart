@@ -26,7 +26,7 @@ class _CoolRoundedButtonState extends State<CoolRoundedButton> {
     return new Padding(
       padding: EdgeInsets.only(top: 6),
       child: new MaterialButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
         elevation: 6.0,
         height: widget.height,
         color: widget.color,
