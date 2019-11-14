@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
         color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500);
 
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
