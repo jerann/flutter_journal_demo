@@ -95,8 +95,8 @@ class _LoginPageState extends State<LoginPage> {
           title: Text(
               loginPageState == LoginPageState.login
                   ? 'Log In'
-                  : 'Create an Account',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600)),
+                  : 'Create a Account',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
           centerTitle: true,
         ),
         body: Container(

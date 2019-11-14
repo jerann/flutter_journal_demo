@@ -77,12 +77,8 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _bodyWidget(),
       floatingActionButton: CoolRoundedButton(
-          child:
-//          Hero(
-//              tag: 'new',
-//              child:
-              Text('Create post',
-                  style: TextStyle(fontSize: 16, color: Colors.white)),
+          child: Text('Create post',
+              style: TextStyle(fontSize: 16, color: Colors.white)),
           color: Colors.blue,
           onPressed: () {
             _openPostEditor(null);
@@ -140,7 +136,15 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [Text(post.title ?? ''), Text(post.body ?? '')],
+                children: [
+                  Container(height: 2),
+                  Text(post.title ?? '',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
+                  Container(height: 10),
+                  Text(post.body ?? '', style: TextStyle(fontSize: 18),),
+                  Container(height: 1, color: Colors.grey),
+                ],
               ))),
     );
   }
@@ -221,12 +225,14 @@ class _PostEditorState extends State<PostEditor> {
                 tag: heroTag,
                 child: Container(
                   width: 380,
-                  color: Colors.blue,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.blue),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           IconButton(
                             icon: Icon(
@@ -237,26 +243,38 @@ class _PostEditorState extends State<PostEditor> {
                               Navigator.pop(context);
                             },
                           ),
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Colors.white),
+                            onPressed: _delete,
+                          )
                         ],
                       ),
                       //Title
-                      TextFormField(
-                        maxLines: 1,
-                        controller: _titleController,
-                        decoration: _textFieldDecoration('Title'),
-                      ),
+                      Padding(
+                          padding:
+                              EdgeInsets.only(left: 80, right: 80, bottom: 20),
+                          child: TextFormField(
+                            maxLines: 1,
+                            controller: _titleController,
+                            decoration: _textFieldDecoration('Title'),
+                          )),
                       //Body
-                      TextFormField(
-                        maxLines: null,
-                        controller: _bodyController,
-                        decoration: _textFieldDecoration('Content'),
-                      ),
+                      Padding(
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                          child: TextFormField(
+                            maxLines: null,
+                            controller: _bodyController,
+                            decoration: _textFieldDecoration('Content'),
+                          )),
                       CoolRoundedButton(
-                        color: Colors.white,
+                        color: Colors.pinkAccent,
                         child: Text('Save',
-                            style: TextStyle(color: Colors.blue, fontSize: 18)),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 18)),
                         onPressed: _finish,
-                      )
+                      ),
+                      Container(height: 20)
                     ],
                   ),
                 ))));
@@ -270,7 +288,7 @@ class _PostEditorState extends State<PostEditor> {
     }
 
     return InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         fillColor: Colors.white,
         filled: true,
         hintText: hint,
@@ -283,6 +301,13 @@ class _PostEditorState extends State<PostEditor> {
     newPost.body = _bodyController.text;
 
     widget.parent.savePost(newPost);
+
+    //Leave
+    Navigator.pop(context);
+  }
+
+  void _delete() {
+    widget.parent.deletePost(widget.post);
 
     //Leave
     Navigator.pop(context);

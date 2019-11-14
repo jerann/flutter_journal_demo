@@ -25,7 +25,7 @@ class FirebaseWrapper {
 //    try {
 //      var authResult = await auth().signInWithEmailAndPassword(email, password);
 //      var userDocResult =
-//          await firestore().collection('users').doc(authResult.user.id).get();
+//          await firestore().collection('users').doc(authResult.user.uid).get();
 //      return userDocResult.id;
 //    } catch (error) {
 //      print('Firebase: failed webSignIn: $error');
@@ -63,17 +63,63 @@ class FirebaseWrapper {
   }
 
   Future<Map<String, dynamic>> _webGetPosts(String uid) async {
-    //TODO
+    //v WEB
+//    try {
+//      var entriesDocResult = await firestore().collection('entries')
+//          .doc(uid)
+//          .get();
+//      return entriesDocResult.data();
+//    } catch (error) {
+//      print('Failed to retrieve entries');
+//    }
+    //^ WEB
     return null;
   }
 
   Future<bool> _webCreatePost(String uid, UserPost post) async {
-    //TODO
-    return null;
+    //v WEB
+//    var timestampID = DateTime.now().millisecondsSinceEpoch.toString();
+//    try {
+//      await firestore().collection('entries').doc(uid).update(data: {timestampID : post.map()});
+//      return true;
+//    } catch (error) {
+//      print('Failed to create post');
+//      try {
+//        await firestore().collection('entries').doc(uid).set({});
+//        await firestore().collection('entries').doc(uid).update(data: {timestampID : post.map()});
+//        return true;
+//      } catch (innerError) {
+//        print('Failed again to create post');
+//      }
+//    }
+    //^ WEB
+    return false;
   }
 
   Future<bool> _webUpdatePost(String uid, UserPost post) async {
-    //TODO
+    //v WEB
+//    try {
+//      await firestore().collection('entries').doc(uid).update(data: {post.id : post.map()});
+//      return true;
+//    } catch (error) {
+//      print('Failed to updated post');
+//    }
+    //^ WEB
+    return false;
+  }
+
+  Future<bool> _webDeletePost(String uid, UserPost post) async {
+    //v WEB
+//    try {
+//      var userDoc = await firestore().collection('entries').doc(uid).get();
+//      var userData = userDoc.data();
+//      userData.remove(post.id);
+//      await firestore().collection('entries').doc(uid).set(userData);
+//      return true;
+//    } catch (error) {
+//      print('Failed to delete post');
+//    }
+    //^ WEB
     return false;
   }
 
@@ -140,8 +186,10 @@ class FirebaseWrapper {
   }
 
   Future<bool> deletePost(String uid, UserPost post) async {
-    //TODO
-    return true;
+    if (kIsWeb) {
+      return _webDeletePost(uid, post);
+    }
+    return _mobileDeletePost(uid, post);
   }
 
   Future<String> _mobileSignIn(String email, String password) async {
@@ -230,7 +278,11 @@ class FirebaseWrapper {
 
   Future<bool> _mobileDeletePost(String uid, UserPost post) async {
     try {
-
+      var userDoc = await Firestore.instance.collection('entries').document(uid).get();
+      var userData = userDoc.data;
+      userData.remove(post.id);
+      await Firestore.instance.collection('entries').document(uid).setData(userData);
+      return true;
     } catch (error) {
       print('Failed to delete post');
     }
