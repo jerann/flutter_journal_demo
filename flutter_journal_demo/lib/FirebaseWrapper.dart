@@ -16,21 +16,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_journal_demo/HomePage.dart';
 
 //v WEB
-//import 'package:firebase/firebase.dart';
+import 'package:firebase/firebase.dart';
 //^ WEB
 
 class FirebaseWrapper {
   Future<String> _webSignIn(String email, String password) async {
     //v WEB
-//    try {
-//      var authResult = await auth().signInWithEmailAndPassword(email, password);
-//      var userDocResult =
-//          await firestore().collection('users').doc(authResult.user.uid).get();
-//      return userDocResult.id;
-//    } catch (error) {
-//      print('Firebase: failed webSignIn: $error');
-//      return null;
-//    }
+    try {
+      var authResult = await auth().signInWithEmailAndPassword(email, password);
+      var userDocResult =
+          await firestore().collection('users').doc(authResult.user.uid).get();
+      return userDocResult.id;
+    } catch (error) {
+      print('Firebase: failed webSignIn: $error');
+      return null;
+    }
     //^ WEB
 
     return null;
@@ -38,25 +38,25 @@ class FirebaseWrapper {
 
   Future<void> _webSignOut() async {
     //v WEB
-//    return await auth().signOut();
+    return await auth().signOut();
     //^ WEB
 
-    return;
+//    return;
   }
 
   Future<bool> _webCreateAccount(String email, String password) async {
     //v WEB
-//    try {
-//      var authResult =
-//          await auth().createUserWithEmailAndPassword(email, password);
-//      await firestore()
-//          .collection('users')
-//          .doc(authResult.user.uid)
-//          .set({'uid': authResult.user.uid, 'email': email});
-//    } catch (error)  {
-//      print('Firebase: failed webSignIn: $error');
-//      return false;
-//    }
+    try {
+      var authResult =
+          await auth().createUserWithEmailAndPassword(email, password);
+      await firestore()
+          .collection('users')
+          .doc(authResult.user.uid)
+          .set({'uid': authResult.user.uid, 'email': email});
+    } catch (error)  {
+      print('Firebase: failed webSignIn: $error');
+      return false;
+    }
     //^ WEB
 
     return false;
@@ -64,61 +64,61 @@ class FirebaseWrapper {
 
   Future<Map<String, dynamic>> _webGetPosts(String uid) async {
     //v WEB
-//    try {
-//      var entriesDocResult = await firestore().collection('entries')
-//          .doc(uid)
-//          .get();
-//      return entriesDocResult.data();
-//    } catch (error) {
-//      print('Failed to retrieve entries');
-//    }
+    try {
+      var entriesDocResult = await firestore().collection('entries')
+          .doc(uid)
+          .get();
+      return entriesDocResult.data();
+    } catch (error) {
+      print('Failed to retrieve entries');
+    }
     //^ WEB
     return null;
   }
 
   Future<bool> _webCreatePost(String uid, UserPost post) async {
     //v WEB
-//    var timestampID = DateTime.now().millisecondsSinceEpoch.toString();
-//    try {
-//      await firestore().collection('entries').doc(uid).update(data: {timestampID : post.map()});
-//      return true;
-//    } catch (error) {
-//      print('Failed to create post');
-//      try {
-//        await firestore().collection('entries').doc(uid).set({});
-//        await firestore().collection('entries').doc(uid).update(data: {timestampID : post.map()});
-//        return true;
-//      } catch (innerError) {
-//        print('Failed again to create post');
-//      }
-//    }
+    var timestampID = DateTime.now().millisecondsSinceEpoch.toString();
+    try {
+      await firestore().collection('entries').doc(uid).update(data: {timestampID : post.map()});
+      return true;
+    } catch (error) {
+      print('Failed to create post');
+      try {
+        await firestore().collection('entries').doc(uid).set({});
+        await firestore().collection('entries').doc(uid).update(data: {timestampID : post.map()});
+        return true;
+      } catch (innerError) {
+        print('Failed again to create post');
+      }
+    }
     //^ WEB
     return false;
   }
 
   Future<bool> _webUpdatePost(String uid, UserPost post) async {
     //v WEB
-//    try {
-//      await firestore().collection('entries').doc(uid).update(data: {post.id : post.map()});
-//      return true;
-//    } catch (error) {
-//      print('Failed to updated post');
-//    }
+    try {
+      await firestore().collection('entries').doc(uid).update(data: {post.id : post.map()});
+      return true;
+    } catch (error) {
+      print('Failed to updated post');
+    }
     //^ WEB
     return false;
   }
 
   Future<bool> _webDeletePost(String uid, UserPost post) async {
     //v WEB
-//    try {
-//      var userDoc = await firestore().collection('entries').doc(uid).get();
-//      var userData = userDoc.data();
-//      userData.remove(post.id);
-//      await firestore().collection('entries').doc(uid).set(userData);
-//      return true;
-//    } catch (error) {
-//      print('Failed to delete post');
-//    }
+    try {
+      var userDoc = await firestore().collection('entries').doc(uid).get();
+      var userData = userDoc.data();
+      userData.remove(post.id);
+      await firestore().collection('entries').doc(uid).set(userData);
+      return true;
+    } catch (error) {
+      print('Failed to delete post');
+    }
     //^ WEB
     return false;
   }
