@@ -6,4 +6,4 @@ Because of small changes necessary for mobile/web Firebase dependencies...
 
 'master' branch is currently configured for mobile builds (Android, iOS)
 
-'web_branch' branch is currently configured for web builds
+'web' branch is currently configured for web builds
